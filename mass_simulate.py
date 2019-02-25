@@ -2,6 +2,10 @@ import feh_utils as feh
 import numpy as np
 import sys
 
+# np.savetxt('pool.txt', pool, fmt='%2i')
+pool = np.loadtxt('pool.txt', dtype=int)
+total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
+
 i = 1 # Generic counter
 
 
@@ -31,7 +35,7 @@ for i in range(simulations):
 
     # Keep pulling until a satisfied conditions are met
     while (not satisfied):
-        circle = feh.pull(pity)
+        circle = feh.pull(pity, pool, total)
         sessions += 1
         round_orbs = 0
         summons = 0
@@ -73,5 +77,5 @@ for i in range(simulations):
     sys.stdout.write('\r'+str(i))
     sys.stdout.flush()
 
-np.savetxt( 'total_sessions.gz', total_sessions, fmt='%2i' )
-np.savetxt( 'total_orbs.gz', total_orbs, fmt='%2i' )
+np.savetxt( 'total_sessions.txt.gz', total_sessions, fmt='%2i' )
+np.savetxt( 'total_orbs.txt.gz', total_orbs, fmt='%2i' )

@@ -1,10 +1,7 @@
 import numpy as np
 
-def pull(PITY):
+def pull(PITY, pool, total):
     # TO DO: Load this data from internet/Interface input
-    # np.savetxt('pool.txt', pool, fmt='%2i')
-    pool = np.loadtxt('pool.txt', dtype=int)
-    total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 
     # Rarities
     # 0 -> 3* or 4*
