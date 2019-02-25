@@ -1,44 +1,77 @@
+import feh_utils as feh
 import numpy as np
-import feh_pull as feh
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
+import sys
 
 i = 1 # Generic counter
 
 
-simulations = 2000
+simulations = 8000
+
+# Colors to snipe. 4 colors will mean full circle summoning
+# Red=0  Blue=1 Green=2 Colorless=3
+snipe = [0,1,2,3]
+
+# Whether to be satisfied with Non-Focus, Focus 5* or any combination
+# 3* or 4* = 0, 5* Non-focus = 1, 5* Focus = 2
+rarity_snipe = [1,2]
 
 # Array with 'simulations' size
-# Holds every result
-N_results = np.empty((0,1), int)
+# Holds number of sessions for each simulation
+total_sessions = np.empty((0,1), dtype=int)
+# Holds number of orbs spent in each simulation
+total_orbs  = np.empty((0,1), dtype=int)
 
 
-while i < simulations+1:
+for i in range(simulations):
 
     satisfied = False
-    N = 0 # Number of pulls
+    sessions = 0 # Number of sessions
+    orbs  = 0 # Number of orbs spent
     pity = 3 / 100
 
-    # Full circle pulling
-    while not satisfied:
+    # Keep pulling until a satisfied conditions are met
+    while (not satisfied):
         circle = feh.pull(pity)
-        N += 1
+        sessions += 1
+        round_orbs = 0
+        summons = 0
 
-        satisfied = any(five_star in circle[1] for five_star in (1, 2) )
+        # Check if I want every orb
+        if circle[0,0] in snipe:
+            summons += 1
+            round_orbs += feh.spend_orbs(round_orbs)
+            satisfied = (circle[1,0] in rarity_snipe)
+        
+        if circle[0,1] in snipe:
+            summons += 1
+            round_orbs += feh.spend_orbs(round_orbs)
+            satisfied = (circle[1,1] in rarity_snipe)
+        
+        if circle[0,2] in snipe:
+            summons += 1
+            round_orbs += feh.spend_orbs(round_orbs)
+            satisfied = (circle[1,2] in rarity_snipe)
 
-        pity = pity + 0.25 / 100
+        if circle[0,3] in snipe:
+            summons += 1
+            round_orbs += feh.spend_orbs(round_orbs)
+            satisfied = (circle[1,3] in rarity_snipe)
 
-    N_results = np.append( N_results, N)
-    i += 1
+        if circle[0,4] in snipe:
+            summons += 1
+            round_orbs += feh.spend_orbs(round_orbs)
+            satisfied = (circle[1,4] in rarity_snipe)
+        
+        orbs += round_orbs 
+        pity += 0.0025 * (5 - summons) / 5.0
 
+    # Satisfied confitions met:
+    total_sessions = np.append( total_sessions, sessions)
+    total_orbs  = np.append( total_orbs, orbs)
 
+    # Keep track real time of the simulations performed
+    sys.stdout.write('\r'+str(i))
+    sys.stdout.flush()
 
-
-# Plotting
-d = np.diff(np.unique(N_results)).min()
-left_of_first_bin = N_results.min() - float(d)/2
-right_of_last_bin = N_results.max() + float(d)/2
-plt.hist(N_results, np.arange(left_of_first_bin, right_of_last_bin + d, d), rwidth=0.95, density=True)
-plt.xticks(np.arange(N_results.min(), N_results.max() + 1))
-
-plt.show()
+np.savetxt( 'total_sessions.gz', total_sessions, fmt='%2i' )
+np.savetxt( 'total_orbs.gz', total_orbs, fmt='%2i' )
