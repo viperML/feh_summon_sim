@@ -4,7 +4,7 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 1
+simulations = 2
 
 # Game pool info, containing focus banner heroes
 # To do: update it from the wiki
@@ -46,6 +46,8 @@ total_heroes = [[-3,-3]]
 
 for i in range(simulations):
 
+    snipe_results[:] = snipe_plan[:]
+    snipe_results[:,2] = 0
     satisfied = False
     sessions = 0 # Number of sessions
     orbs  = 0    # Number of orbs spent
@@ -110,8 +112,7 @@ for i in range(simulations):
                         if c[1] > 0:
                             reset_pity = True
                         else:
-                            pity += 0.0005
-                
+                            pity += 0.0005           
 
 
         if reset_pity:
@@ -130,10 +131,8 @@ for i in range(simulations):
         elif at_least_mode and any(row[2] != 0 for row in snipe_results):
             satisfied = True
 
-
         orbs += round_orbs
 
-        # satisfied = sessions > 50
 
     # Satisfied confitions met:
     total_sessions = np.append( total_sessions, sessions)
