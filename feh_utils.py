@@ -16,19 +16,23 @@ def pull(PITY, pool, total):
     # IN LENDARY BANNERS, P(1) = 0, TO DO
     rarity_probabilities = [ 1-2*PITY, PITY, PITY]
 
+    pull = np.empty([5,2], dtype=int)
     # ROLL RARITIES
-    rarity_circle = np.random.choice(rarity, 5, p=list(rarity_probabilities) )
+    pull[:,1] = np.random.choice(rarity, 5, p=list(rarity_probabilities) )
 
     # ROLL COLOR depending on rarity
-    color_circle = np.empty([5], dtype=int)
     for i in range(5):
-        color_circle[i] = np.random.choice(color, 1, p=list([
-            pool[rarity_circle[i], 0] / total[rarity_circle[i]],
-            pool[rarity_circle[i], 1] / total[rarity_circle[i]],
-            pool[rarity_circle[i], 2] / total[rarity_circle[i]],
-            pool[rarity_circle[i], 3] / total[rarity_circle[i]]
-        ]))
-    return np.vstack([color_circle, rarity_circle])
+            pull[i,0] = np.random.choice(color, 1, p=list([
+                pool[pull[i,1], 0] / total[pull[i,1]],
+                pool[pull[i,1], 1] / total[pull[i,1]],
+                pool[pull[i,1], 2] / total[pull[i,1]],
+                pool[pull[i,1], 3] / total[pull[i,1]] ]))
+
+            # If 5 star and there are more than 1 focus unit for the same color
+            if pull[i,1] == 2 and pool[2, pull[i,0]] > 1:
+                pull[i,1] = np.random.choice( np.arange(2, pool[2, pull[i,0]] + 2), 1)
+                
+    return pull
 
 def spend_orbs(orbs):
     if orbs == 0:

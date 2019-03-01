@@ -1,0 +1,3 @@
+# Color, code and quantity
+1 2 -1
+1 3 -1
