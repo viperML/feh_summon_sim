@@ -4,7 +4,7 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 2
+simulations = 10000
 
 # Game pool info, containing focus banner heroes
 # To do: update it from the wiki
@@ -14,7 +14,7 @@ total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 
 # Snipe plan holds in each entry the color of the character, quantity (-1 if only one is wanted of any) and id
 # It is supposed to be correctly formatted
-snipe_plan = np.loadtxt('snipe_plan.txt', dtype=int)
+snipe_plan = np.loadtxt('snipe_plan.txt', dtype=int, ndmin=2)
 color_priority = np.loadtxt('color_priority.txt', dtype=int)
 # Check for quantity column and set at_least_mode
 if all(j <= 0 for j in snipe_plan[:,2]):
@@ -78,7 +78,7 @@ for i in range(simulations):
                 
                 #print(c, end=" ")
                 #print("Color in snipe results, pulling")
-                total_heroes = np.append(total_heroes, [c], axis=0)
+                # total_heroes = np.append(total_heroes, [c], axis=0)
 
                 summons += 1
                 round_orbs += feh.spend_orbs(round_orbs)
@@ -108,7 +108,7 @@ for i in range(simulations):
                         #print(c)
                         summons += 1
                         round_orbs += feh.spend_orbs(round_orbs)
-                        total_heroes = np.append(total_heroes, [c], axis=0)
+                        # total_heroes = np.append(total_heroes, [c], axis=0)
                         if c[1] > 0:
                             reset_pity = True
                         else:
@@ -147,6 +147,6 @@ for i in range(simulations):
 total_heroes = np.delete(total_heroes, 0, 0)
 #print(total_heroes)
 
-np.savetxt( 'total_sessions.txt.gz', total_sessions, fmt='%2i' )
-np.savetxt( 'total_orbs.txt.gz', total_orbs, fmt='%2i' )
+np.savetxt( 'total_sessions.txt.gz', total_sessions, fmt='%3i' )
+np.savetxt( 'total_orbs.txt.gz', total_orbs, fmt='%4i' )
 np.savetxt( 'total_heroes.txt.gz', total_heroes, fmt='%1i')
