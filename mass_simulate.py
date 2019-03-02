@@ -4,7 +4,11 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 10000
+simulations = 7000
+
+pity_initial = [0.08, 0.00]
+pity = np.empty_like(pity_initial)
+pity_max = np.empty_like(pity_initial)
 
 # Game pool info, containing focus banner heroes
 # To do: update it from the wiki
@@ -12,11 +16,13 @@ pool = np.loadtxt('pool.txt', dtype=int)
 total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 
 
-# Snipe plan holds in each entry the color of the character, quantity (-1 if only one is wanted of any) and id
+
+# SNIPE PLAN holds in each entry the color of the character, id and quantity (-1 if only one is wanted of any)
 # It is supposed to be correctly formatted
 snipe_plan = np.loadtxt('snipe_plan.txt', dtype=int, ndmin=2)
+# Order to  snipe colors, in case colors in snipe plan are not available. 
 color_priority = np.loadtxt('color_priority.txt', dtype=int)
-# Check for quantity column and set at_least_mode
+# Check at_least_mode
 if all(j <= 0 for j in snipe_plan[:,2]):
     at_least_mode = True
     snipe_plan[:,2] = 1
@@ -31,27 +37,31 @@ print(snipe_plan)
 print("at_least_mode:", end=" ")
 print(at_least_mode)
 
+# SNIPE RESULTS is the same as snipe_plan, but holds quantity information of current simulations
 snipe_results = np.empty_like(snipe_plan)
-snipe_results[:] = snipe_plan[:]
-snipe_results[:,2] = 0
 
 
-# Arrays with 'simulations' size
+# 1D Arrays with 'simulations' size
 # Holds number of sessions for each simulation
 total_sessions = np.empty((0,1), dtype=int)
 # Holds number of orbs spent in each simulation
 total_orbs  = np.empty((0,1), dtype=int)
-total_heroes = [[-3,-3]]
+total_pity_max = np.empty((0,1))
 
+total_heroes = np.zeros( (snipe_plan[:,1].max()+1,4), dtype=int)
 
 for i in range(simulations):
 
     snipe_results[:] = snipe_plan[:]
     snipe_results[:,2] = 0
+
     satisfied = False
+
     sessions = 0 # Number of sessions
     orbs  = 0    # Number of orbs spent
-    pity = 3 / 100
+
+    pity[:] = pity_initial[:]
+    pity_max = [0.0, 0.0]
     #print(snipe_plan)
     #print(snipe_results)
 
@@ -82,12 +92,16 @@ for i in range(simulations):
 
                 summons += 1
                 round_orbs += feh.spend_orbs(round_orbs)
+                total_heroes[c[1], c[0]] += 1
 
                 # If orb turns to be a 5 star, reset pity
                 if c[1] > 0:
                     reset_pity = True
                 else:
-                    pity += 0.0005
+                    for p in range(2):
+                        if pity[p] > 0.0:
+                            pity[p] += 0.0005 
+
                 
                 # If 5 star, color and id matches, add to the results
                 for j in range(snipe_results.shape[0]):
@@ -108,15 +122,19 @@ for i in range(simulations):
                         #print(c)
                         summons += 1
                         round_orbs += feh.spend_orbs(round_orbs)
+                        total_heroes[c[1], c[0]] += 1
                         # total_heroes = np.append(total_heroes, [c], axis=0)
                         if c[1] > 0:
                             reset_pity = True
                         else:
-                            pity += 0.0005           
+                            for p in range(2):
+                                if pity[p] > 0.0:
+                                    pity[p] += 0.0005         
 
-
+        if pity[0] > pity_max[0]:
+            pity_max[:] = pity[:]
         if reset_pity:
-            pity = 3/100
+            pity[:] = pity_initial[:]
 
         # When quantity plan is reached, reset the component to -2
         for j in range(snipe_results.shape[0]):
@@ -137,16 +155,17 @@ for i in range(simulations):
     # Satisfied confitions met:
     total_sessions = np.append( total_sessions, sessions)
     total_orbs  = np.append( total_orbs, orbs)
-
+    total_pity_max = np.append( total_pity_max, pity_max[0])
+    #print(pity_max)
     
 
     # Keep track real time of the simulations performed
     sys.stdout.write('\r'+str(i+1))
     sys.stdout.flush()
 
-total_heroes = np.delete(total_heroes, 0, 0)
-#print(total_heroes)
 
 np.savetxt( 'total_sessions.txt.gz', total_sessions, fmt='%3i' )
 np.savetxt( 'total_orbs.txt.gz', total_orbs, fmt='%4i' )
 np.savetxt( 'total_heroes.txt.gz', total_heroes, fmt='%1i')
+np.savetxt( 'total_heroes.txt', total_heroes, fmt='%5i')
+np.savetxt( 'total_pity_max.txt.gz', total_pity_max)

@@ -1,8 +1,6 @@
 import numpy as np
 
-def pull(PITY, pool, total):
-    # TO DO: Load this data from internet/Interface input
-
+def pull(pity, pool, total):
     # Rarities
     # 0 -> 3* or 4*
     # 1 -> 5* Non-Focus
@@ -12,13 +10,9 @@ def pull(PITY, pool, total):
     # Red=0  Blue=1 Green=2 Colorless=3
     color  = [0, 1, 2, 3]
 
-
-    # IN LENDARY BANNERS, P(1) = 0, TO DO
-    rarity_probabilities = [ 1-2*PITY, PITY, PITY]
-
     pull = np.empty([5,2], dtype=int)
     # ROLL RARITIES
-    pull[:,1] = np.random.choice(rarity, 5, p=list(rarity_probabilities) )
+    pull[:,1] = np.random.choice(rarity, 5, p=list([1-sum(pity), pity[1], pity[0]]) )
 
     # ROLL COLOR depending on rarity
     for i in range(5):
