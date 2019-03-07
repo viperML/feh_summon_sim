@@ -6,7 +6,7 @@ from tkinter import *
 import os
 
 # Set to same number when planning to overlay plots
-xlim = 500
+xlim = 700
 xstep = 50
 
 # Prompt user to choose file
@@ -14,6 +14,41 @@ root = Tk()
 file = filedialog.askopenfilename(initialdir = "./",title = "Select simulation data",filetypes = ((".gz files","total_orbs*.gz"),("all files","*.*")))
 fpath, fname = os.path.split(file)
 print(fname)
+
+# Automatic color detection
+if 'red' in fname:
+    if 'any' in fname:
+        color = 'darkred'
+        title = 'Red Any'
+    else:
+        color = 'red'
+        title = 'Red Specific'
+elif 'blue' in fname:
+    if 'any' in fname:
+        color = 'darkblue'
+        title = 'Blue Any'
+    else:
+        color = 'blue'
+        title = 'Blue Specific'
+elif 'green' in fname:
+    if 'any' in fname:
+        color = 'darkgreen'
+        title = 'Green Any'
+    else:
+        color = 'green'
+        title = 'Green Especific'
+elif 'colorless' in fname:
+    if 'any' in fname:
+        color = 'gray'
+        title = 'Colorless Any'
+    else:
+        color = 'silver'
+        title = 'Colorless Specific'
+else:
+    color = 'fuchsia'
+
+print(title)
+
 total_orbs = np.loadtxt(file, dtype=int)
 
 
@@ -44,40 +79,18 @@ for i in range(1, cumulative_frequency.size):
         percentile90 = i
 
 print("Average:", end=" ")
-print("%.2f" % mu)
+print("%1.0f" % mu)
 print("Median:", end=" ")
 print(percentile50)
 print("90th:", end=" ")
 print(percentile90)
-print("Standard Deviation:", end=" ")
-print("%.2f" % sigma)
+#print("Standard Deviation:", end=" ")
+#print("%.2f" % sigma)
 
 
 # Plotting
 fig, ax = plt.subplots()
-# Automatic plot color tint
-if 'red' in fname:
-    if 'any' in fname:
-        color = 'darkred'
-    else:
-        color = 'red'
-elif 'blue' in fname:
-    if 'any' in fname:
-        color = 'darkblue'
-    else:
-        color = 'blue'
-elif 'green' in fname:
-    if 'any' in fname:
-        color = 'darkgreen'
-    else:
-        color = 'green'
-elif 'colorless' in fname:
-    if 'any' in fname:
-        color = 'gray'
-    else:
-        color = 'silver'
-else:
-    color = 'fuchsia'
+
 
 ax.plot(cumulative_frequency, color=color)
 
@@ -89,5 +102,5 @@ ax.set_xlabel("Orbs Spent")
 ax.set_ylabel("P(X<x)")
 
 plt.grid()
-plt.savefig(fname.replace('.txt.gz', '.png'))
+plt.savefig('fig_' + fname.replace('.txt.gz', '.png'))
 plt.show()

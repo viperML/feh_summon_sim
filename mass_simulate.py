@@ -4,7 +4,7 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 9000
+simulations = 20000
 
 pity_initial = [0.03, 0.03]
 pity = np.empty_like(pity_initial)
