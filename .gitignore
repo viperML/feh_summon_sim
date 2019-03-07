@@ -1,5 +1,7 @@
 # Simulation data
 *.gz
+*.png
+test.py
 
 .vscode
 

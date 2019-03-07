@@ -4,9 +4,9 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 7000
+simulations = 9000
 
-pity_initial = [0.08, 0.00]
+pity_initial = [0.03, 0.03]
 pity = np.empty_like(pity_initial)
 pity_max = np.empty_like(pity_initial)
 
@@ -36,6 +36,8 @@ print("Snipe plan:")
 print(snipe_plan)
 print("at_least_mode:", end=" ")
 print(at_least_mode)
+print("Initial rates:", end=" ")
+print(pity_initial)
 
 # SNIPE RESULTS is the same as snipe_plan, but holds quantity information of current simulations
 snipe_results = np.empty_like(snipe_plan)
@@ -48,7 +50,7 @@ total_sessions = np.empty((0,1), dtype=int)
 total_orbs  = np.empty((0,1), dtype=int)
 total_pity_max = np.empty((0,1))
 
-total_heroes = np.zeros( (snipe_plan[:,1].max()+1,4), dtype=int)
+total_heroes = np.zeros( (4,4), dtype=int)
 
 for i in range(simulations):
 
