@@ -4,7 +4,7 @@ import sys
 
 # np.savetxt('pool.txt', pool, fmt='%2i')
 
-simulations = 20000
+simulations = 8000
 
 pity_initial = [0.03, 0.03]
 pity = np.empty_like(pity_initial)
@@ -50,7 +50,7 @@ total_sessions = np.empty((0,1), dtype=int)
 total_orbs  = np.empty((0,1), dtype=int)
 total_pity_max = np.empty((0,1))
 
-total_heroes = np.zeros( (4,4), dtype=int)
+total_heroes = np.zeros( (4,pool[2].max()+2), dtype=int)
 
 for i in range(simulations):
 

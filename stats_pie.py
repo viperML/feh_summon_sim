@@ -5,11 +5,17 @@ angl = -80
 
 total_heroes = np.loadtxt('total_heroes.txt', dtype=int)
 
-if total_heroes[:,0].size == 4:
-#    specific_colors = ['mistyrose', 'lightcoral', 'coral', 'orangered',
-#                       'aliceblue', 'lightskyblue', 'c', 'teal',
-#                       'honeydew', 'palegreen', 'lime', 'lawngreen',
-#                       'whitesmoke', 'lightgrey', 'grey', 'dimgrey']
+if total_heroes[:,0].size == 3:
+    specific_colors = ['#ffcdd2', '#ef9a9a', '#f44336',
+                       '#c5cae9', '#9fa8da', '#3f51b5',
+                       '#c8e6c9', '#a5d6a7', '#4caf50',
+                       '#f5f5f5', '#e0e0e0', '#9e9e9e']
+    expsize = 0.2
+    explode = [0,0,expsize,
+               0,0,expsize,
+               0,0,expsize,
+               0,0,expsize]
+elif total_heroes[:,0].size == 4:
     specific_colors = ['#ffcdd2', '#ef9a9a', '#f44336', '#e53935',
                        '#c5cae9', '#9fa8da', '#3f51b5', '#3949ab',
                        '#c8e6c9', '#a5d6a7', '#4caf50', '#43a047',

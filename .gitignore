@@ -2,6 +2,7 @@
 *.gz
 *.png
 test.py
+total_heroes.txt
 
 .vscode
 

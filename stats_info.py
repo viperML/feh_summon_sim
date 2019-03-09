@@ -6,8 +6,8 @@ from tkinter import *
 import os
 
 # Set to same number when planning to overlay plots
-xlim = 700
-xstep = 50
+xlim = 1200
+xstep = 100
 
 # Prompt user to choose file
 root = Tk()
@@ -46,6 +46,7 @@ elif 'colorless' in fname:
         title = 'Colorless Specific'
 else:
     color = 'fuchsia'
+    title = ' '
 
 print(title)
 
