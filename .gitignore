@@ -3,6 +3,7 @@
 *.png
 test.py
 total_heroes.txt
+permanent_pool.csv
 
 .vscode
 
