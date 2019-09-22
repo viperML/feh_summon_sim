@@ -11,7 +11,7 @@ xstep = 100
 
 # Prompt user to choose file
 root = Tk()
-file = filedialog.askopenfilename(initialdir = "./",title = "Select simulation data",filetypes = ((".gz files","total_orbs*.gz"),("all files","*.*")))
+file = filedialog.askopenfilename(initialdir = "./",title = "Select simulation data",filetypes = ((".npy files","*.npy"),("all files","*.*")))
 fpath, fname = os.path.split(file)
 print(fname)
 
@@ -50,7 +50,7 @@ else:
 
 print(title)
 
-total_orbs = np.loadtxt(file, dtype=int)
+total_orbs = np.load(file)
 
 
 orbs_frequency = np.zeros(total_orbs.max()+1)
@@ -103,5 +103,5 @@ ax.set_xlabel("Orbs Spent")
 ax.set_ylabel("P(X<x)")
 
 plt.grid()
-plt.savefig('fig_' + fname.replace('.txt.gz', '.png'))
+plt.savefig('fig_' + fname.replace('.npy', '.png'))
 plt.show()

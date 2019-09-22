@@ -2,25 +2,27 @@ import feh_utils as feh
 import numpy as np
 import sys
 
-# np.savetxt('pool.txt', pool, fmt='%2i')
 
 simulations = 8000
 
+# TO DO visual input
 pity_initial = [0.03, 0.03]
 pity = np.empty_like(pity_initial)
 pity_max = np.empty_like(pity_initial)
 
 # Game pool info, containing focus banner heroes
-# To do: update it from the wiki
-pool = np.loadtxt('pool.txt', dtype=int)
+pool = np.loadtxt(open("pool_permanent.csv", "rb"), delimiter=",", dtype=int)
+# TO DO visual input
+pool = np.append( pool, [np.loadtxt(open("pool_focus.csv", "rb"), delimiter=",", dtype=int)], axis=0)
 total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 
 
 
 # SNIPE PLAN holds in each entry the color of the character, id and quantity (-1 if only one is wanted of any)
-# It is supposed to be correctly formatted
+# Each row for each character to snipe for
+# It is supposed to be correctly formatted TO DO visual input
 snipe_plan = np.loadtxt('snipe_plan.txt', dtype=int, ndmin=2)
-# Order to  snipe colors, in case colors in snipe plan are not available. 
+# Order to  snipe colors, IN CASE colors in snipe plan are not available. 
 color_priority = np.loadtxt('color_priority.txt', dtype=int)
 # Check at_least_mode
 if all(j <= 0 for j in snipe_plan[:,2]):
@@ -43,14 +45,14 @@ print(pity_initial)
 snipe_results = np.empty_like(snipe_plan)
 
 
-# 1D Arrays with 'simulations' size
+# Vectors with 'simulations' size
 # Holds number of sessions for each simulation
 total_sessions = np.empty((0,1), dtype=int)
 # Holds number of orbs spent in each simulation
 total_orbs  = np.empty((0,1), dtype=int)
 total_pity_max = np.empty((0,1))
 
-total_heroes = np.zeros( (4,pool[2].max()+2), dtype=int)
+total_heroes = np.zeros( (pool[2].max()+2,4), dtype=int)
 
 for i in range(simulations):
 
@@ -166,8 +168,8 @@ for i in range(simulations):
     sys.stdout.flush()
 
 
-np.savetxt( 'total_sessions.txt.gz', total_sessions, fmt='%3i' )
-np.savetxt( 'total_orbs.txt.gz', total_orbs, fmt='%4i' )
-np.savetxt( 'total_heroes.txt.gz', total_heroes, fmt='%1i')
-np.savetxt( 'total_heroes.txt', total_heroes, fmt='%5i')
-np.savetxt( 'total_pity_max.txt.gz', total_pity_max)
+np.save( 'total_sessions.npy', total_sessions)
+np.save( 'total_orbs.npy', total_orbs)
+np.save( 'total_heroes.npy', total_heroes)
+np.save( 'total_heroes.npy', total_heroes)
+np.save( 'total_pity_max.npy', total_pity_max)
