@@ -1,10 +1,9 @@
 # Simulation data
-*.gz
-*.png
+*.csv
 *.npy
+
+*.png
 test.py
-total_heroes.txt
-permanent_pool.csv
 
 .vscode
 
