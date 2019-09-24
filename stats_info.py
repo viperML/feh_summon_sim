@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 file = 'total_orbs.npy'
 
@@ -50,7 +51,6 @@ for i in range(1, orbs_frequency.size):
 cumulative_frequency /= cumulative_frequency.max()/100
 
 # Calculate average, std deviation, median and 90th
-
 mu = sum(total_orbs) / total_orbs.size
 
 sigma = (total_orbs - mu)**2
@@ -79,6 +79,8 @@ print(percentile98)
 #print("Standard Deviation:", end=" ")
 #print("%.2f" % sigma)
 
+
+# Set X limits and tick size
 print("")
 print("x limit: [Default previous data]")
 x_data = [0, 0]
@@ -93,19 +95,24 @@ else:
 
 
 # Plotting
-color01 = '#212121'
+sns.set_style("whitegrid", {
+    'axes.grid': True,
+    'grid.color': '.9',
+    'grid.linestyle': '--',
+    })
+sns.set_context("poster")
+
 fig, ax = plt.subplots()
 
-ax.plot(cumulative_frequency, color=color, linewidth=2.5, alpha=0.8)
-
-ax.set_xticks(np.arange(0,x_data[0],x_data[1]))
+ax.plot(cumulative_frequency, color=color, linewidth=4)
 ax.set_xlim(right=x_data[0], left=0)
-#ax.set_ylim(bottom=2, top=99.5)
-ax.set_yticks([0,10,20,30,40,50,60,70,80,90,100])
-ax.set_xlabel("Orbs Spent", color=color01, fontsize=15)
-ax.set_ylabel("Chance of success (%)", color=color01, fontsize=15)
+ax.set_xticks(np.arange(0,x_data[0],x_data[1]))
 
-plt.grid()
+ax.set_yticks(np.arange(0,110,10))
+#ax.set_xlabel("Orbs Spent", fontsize=30, labelpad=20)
+#ax.set_ylabel("Chance of success (%)",fontsize=30, labelpad=20)
+
+fig.set_size_inches(11, 8, forward=True)
 
 plt.savefig('fig_total_orbs_' + color + '.png')
 plt.show()
