@@ -1,6 +1,7 @@
 # Simulation data
 *.csv
 *.npy
+snipe_plan.txt
 
 *.png
 test.py

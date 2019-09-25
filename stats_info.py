@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import seaborn as sns
 
 file = 'total_orbs.npy'
@@ -96,22 +97,30 @@ else:
 
 # Plotting
 sns.set_style("whitegrid", {
+    'axes.edgecolor': '.8',
     'axes.grid': True,
+    'font.family': ['nintendoP_Skip-D_003'],
     'grid.color': '.9',
     'grid.linestyle': '--',
-    })
+    'xtick.color': '.2',
+    'ytick.color': '.2',
+})
 sns.set_context("poster")
 
 fig, ax = plt.subplots()
 
-ax.plot(cumulative_frequency, color=color, linewidth=4)
+ax.plot(cumulative_frequency, color=color, linewidth=5)
+
 ax.set_xlim(right=x_data[0], left=0)
-ax.set_xticks(np.arange(0,x_data[0],x_data[1]))
+ax.set_xticks(np.arange(0,x_data[0]+x_data[1],x_data[1]))
 
 ax.set_yticks(np.arange(0,110,10))
+ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 #ax.set_xlabel("Orbs Spent", fontsize=30, labelpad=20)
 #ax.set_ylabel("Chance of success (%)",fontsize=30, labelpad=20)
 
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
 fig.set_size_inches(11, 8, forward=True)
 
 plt.savefig('fig_total_orbs_' + color + '.png')

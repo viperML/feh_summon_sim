@@ -3,7 +3,7 @@ import numpy as np
 
 angl = -80
 
-total_heroes = np.loadtxt('total_heroes.txt', dtype=int)
+total_heroes = np.load('total_heroes.npy')
 
 if total_heroes[:,0].size == 3:
     specific_colors = ['#ffcdd2', '#ef9a9a', '#f44336',

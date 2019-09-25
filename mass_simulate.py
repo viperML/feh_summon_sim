@@ -3,10 +3,10 @@ import numpy as np
 import sys
 
 
-simulations = 8000
+simulations = 9000
 
 # TO DO visual input
-pity_initial = [0.03, 0.03]
+pity_initial = [0.08, 0.00]
 pity = np.empty_like(pity_initial)
 pity_max = np.empty_like(pity_initial)
 
@@ -23,7 +23,7 @@ total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 # It is supposed to be correctly formatted TO DO visual input
 snipe_plan = np.loadtxt('snipe_plan.txt', dtype=int, ndmin=2)
 # Order to  snipe colors, IN CASE colors in snipe plan are not available. 
-color_priority = np.loadtxt('color_priority.txt', dtype=int)
+color_priority = [0, 1, 3, 2]
 # Check at_least_mode
 if all(j <= 0 for j in snipe_plan[:,2]):
     at_least_mode = True
@@ -164,7 +164,7 @@ for i in range(simulations):
     
 
     # Keep track real time of the simulations performed
-    sys.stdout.write('\r'+str(i+1))
+    sys.stdout.write('\r' + '[' + str(int(100*i/simulations))+ '%] ' +str(i+1)+'/'+str(simulations))
     sys.stdout.flush()
 
 
