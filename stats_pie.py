@@ -46,7 +46,7 @@ general_colors = ['red', 'blue', 'green', 'silver']
 
 ax.pie(total_heroes.transpose().flatten(), radius=1, colors=specific_colors, explode=explode, labels=relative_string, startangle=angl, labeldistance=1.05,
     wedgeprops=dict(width=size, edgecolor='w'),
-    textprops=dict(size='small'))
+    textprops=dict(size='small', fontname='nintendoP_Skip-D_003'))
 
 ax.pie(total_heroes.sum(axis=0), radius=1-size, colors=general_colors, autopct='%1.2f%%',pctdistance=0.5,startangle=angl,
     wedgeprops=dict(width=1-size, edgecolor='w'),

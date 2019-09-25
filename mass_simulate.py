@@ -88,7 +88,8 @@ for i in range(simulations):
             # Orb is pulled if:
             # Color is in the snipe plan
             #       (When the quantity is reached, it is removed from the snipe plan)
-            if any(c[0] == i for i in snipe_results[:,0]):
+            # If using at_least_mode, the session will stop with the first 5*
+            if any(c[0] == i for i in snipe_results[:,0]) and satisfied == False:
                 
                 #print(c, end=" ")
                 #print("Color in snipe results, pulling")
@@ -112,6 +113,7 @@ for i in range(simulations):
                     if c[0] == snipe_results[j,0] and c[1] == snipe_results[j,1]:
                         a = [0,0,1]
                         snipe_results[j] += a
+                        if at_least_mode == True: satisfied = True
                         #print("yeet")
                         #print(snipe_results)
         
