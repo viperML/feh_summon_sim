@@ -4,6 +4,7 @@ import sys
 
 
 simulations = 9000
+full_circle = False
 
 # TO DO visual input
 pity_initial = np.load('pool_focus_pity.npy')
@@ -38,6 +39,8 @@ print("Snipe plan:")
 print(snipe_plan)
 print("at_least_mode:", end=" ")
 print(at_least_mode)
+print("full_circle:", end=" ")
+print(full_circle)
 print("Initial rates:", end=" ")
 print(pity_initial)
 
@@ -89,7 +92,7 @@ for i in range(simulations):
             # Color is in the snipe plan
             #       (When the quantity is reached, it is removed from the snipe plan)
             # If using at_least_mode, the session will stop with the first 5*
-            if any(c[0] == i for i in snipe_results[:,0]) and satisfied == False:
+            if any(c[0] == i for i in snipe_results[:,0]) and not (satisfied == True and full_circle == False):
                 
                 #print(c, end=" ")
                 #print("Color in snipe results, pulling")

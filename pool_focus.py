@@ -12,8 +12,8 @@ np.save('pool_focus_heroes.npy', n)
 pity = [0.03, 0.03]
 
 print("")
-print("Please type initial pity for focus heroes (0.03 standard, 0.08 legendary)")
-pity[0] = float(input(": "))
-print("Please type initial pity for permanent pool heroes (0.03 standard, 0.00 legendary)")
-pity[1] = float(input(": "))
+print("Please type initial pity for focus heroes ( 3% standard, 8% legendary)")
+pity[0] = float(input("[0-100]: "))/100.0
+print("Please type initial pity for permanent pool heroes ( 3% standard, 0% legendary)")
+pity[1] = float(input("[0-100]: "))/100.0
 np.save('pool_focus_pity.npy', pity)
