@@ -1,14 +1,19 @@
-import csv
+import numpy as np
 
-print("Please insert nº of Focus Heroes")
-red = input("[Red]: ")
-blue = input("[Blue]: ")
-green = input("[Green]: ")
-colorless = input("[Colorless]: ")
+n = [0,0,0,0]
 
-with open('pool_focus.csv', 'wt', newline='') as f:
-    csv_writer = csv.writer(f)
-    csv_writer.writerow(['#Red', 'Blue', 'Green', 'Colorless'])
-    csv_writer.writerow( [red, blue, green, colorless] )
+print("Please type nº of Focus Heroes")
+n[0] = int(input("[Red]: "))
+n[1] = int(input("[Blue]: "))
+n[2] = int(input("[Green]: "))
+n[3] = int(input("[Colorless]: "))
+np.save('pool_focus_heroes.npy', n)
 
-print("pool_focus.csv generated succesfully")
+pity = [0.03, 0.03]
+
+print("")
+print("Please type initial pity for focus heroes (0.03 standard, 0.08 legendary)")
+pity[0] = float(input(": "))
+print("Please type initial pity for permanent pool heroes (0.03 standard, 0.00 legendary)")
+pity[1] = float(input(": "))
+np.save('pool_focus_pity.npy', pity)

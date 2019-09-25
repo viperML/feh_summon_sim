@@ -6,14 +6,14 @@ import sys
 simulations = 9000
 
 # TO DO visual input
-pity_initial = [0.08, 0.00]
+pity_initial = np.load('pool_focus_pity.npy')
 pity = np.empty_like(pity_initial)
 pity_max = np.empty_like(pity_initial)
 
 # Game pool info, containing focus banner heroes
 pool = np.loadtxt(open("pool_permanent.csv", "rb"), delimiter=",", dtype=int)
 # TO DO visual input
-pool = np.append( pool, [np.loadtxt(open("pool_focus.csv", "rb"), delimiter=",", dtype=int)], axis=0)
+pool = np.append( pool, [np.load('pool_focus_heroes.npy')], axis=0)
 total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
 
 
