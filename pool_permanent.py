@@ -1,7 +1,7 @@
 import urllib.request
 import re
 from bs4 import BeautifulSoup
-import csv
+import numpy as np
 
 url = 'https://feheroes.gamepedia.com/Summonable_Heroes'
 print("Connecting to", url)
@@ -17,10 +17,11 @@ rarities = rarities[0]
 print("String obtained: ", rarities)
 print("Parsing data...")
 
-with open('pool_permanent.csv', 'wt', newline='') as f:
-    csv_writer = csv.writer(f)
-    csv_writer.writerow(['#Red', 'Blue', 'Green', 'Colorless'])
-    csv_writer.writerow( [ str( int( rarities[65:67]) + int(rarities[67:69] )), str( int( rarities[75:77]) + int(rarities[77:79] )), str( int( rarities[86:88]) + int(rarities[88:90] )), str( int( rarities[101:103]) + int(rarities[103:105] )) ] )
-    csv_writer.writerow( [rarities[63:65], rarities[73:75], rarities[84:86], rarities[99:101]])
+r = [ [ int(rarities[65:67]) + int(rarities[67:69]), int(rarities[75:77]) + int(rarities[77:79]), int( rarities[86:88]) + int(rarities[88:90]), int( rarities[101:103]) + int(rarities[103:105])],
+    [ int(rarities[63:65]), int(rarities[73:75]), int(rarities[84:86]), int(rarities[99:101])] ]
+
+np.save('pool_permanent.npy', r)
+
+
 
 print("pool_permanent.csv generated succesfully")
