@@ -67,13 +67,24 @@ for i in range(1, cumulative_frequency.size):
         percentile90 = i
     if cumulative_frequency[i] >= 98.0 and percentile98 == 0:
         percentile98 = i
-    
+
+
 print("")
-print("Average:", end=" ")
+
+if color_input == 0 or color_input == 10:
+    print("Rojo:")
+elif color_input == 1 or color_input == 11:
+    print("Azul:")
+elif color_input == 2 or color_input == 12:
+    print("Verde:")
+elif color_input == 3 or color_input == 13:
+    print("Gris:")
+
+print("Media:", end=" ")
 print("%1.0f" % mu)
-print("Median:", end=" ")
+print("Mediana:", end=" ")
 print(percentile50)
-print("90th:", end=" ")
+print("Percentil 90%:", end=" ")
 print(percentile90)
 print("98th:", end=" ")
 print(percentile98)
@@ -123,5 +134,5 @@ plt.xticks(fontsize=25)
 plt.yticks(fontsize=25)
 fig.set_size_inches(11, 8, forward=True)
 
-plt.savefig('fig_total_orbs_' + color + '.png')
+plt.savefig('fig/total_orbs_' + color + '.png')
 plt.show()
