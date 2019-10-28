@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 
-simulations = 10000
+simulations = 30000
 full_circle = False
 
 # TO DO visual input

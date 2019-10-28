@@ -29,7 +29,7 @@ elif color_input == 12:
 elif color_input == 3:
     color = 'gray'
 elif color_input == 13:
-    color = 'silver'
+    color = '#555555'
 elif color_input == 4:
     color = 'fuchsia'
 elif color_input == 14:
@@ -58,11 +58,14 @@ sigma = (total_orbs - mu)**2
 sigma = np.sqrt( sum(sigma) / sigma.size )
 
 percentile50 = 0
+percentile80 = 0
 percentile90 = 0
 percentile98 = 0
 for i in range(1, cumulative_frequency.size):
     if cumulative_frequency[i] >= 50.0 and percentile50 == 0:
         percentile50 = i
+    if cumulative_frequency[i] >= 80.0 and percentile80 == 0:
+        percentile80 = i
     if cumulative_frequency[i] >= 90.0 and percentile90 == 0:
         percentile90 = i
     if cumulative_frequency[i] >= 98.0 and percentile98 == 0:
@@ -80,10 +83,12 @@ elif color_input == 2 or color_input == 12:
 elif color_input == 3 or color_input == 13:
     print("Gris:")
 
-print("Media:", end=" ")
-print("%1.0f" % mu)
 print("Mediana:", end=" ")
 print(percentile50)
+print("Media:", end=" ")
+print("%1.0f" % mu)
+print("Percentil 80%:", end=" ")
+print(percentile80)
 print("Percentil 90%:", end=" ")
 print(percentile90)
 print("98th:", end=" ")

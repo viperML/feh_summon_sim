@@ -1,46 +1,72 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys # DEBUG
 
 angl = -80
 
-total_heroes = np.load('total_heroes.npy')
+pool = np.load('pool_permanent.npy')
+pool = np.append( pool, [np.load('pool_focus_heroes.npy')], axis=0)
+total = [np.sum(pool[0]), np.sum(pool[1]), np.sum(pool[2])]
+pity = np.load('pool_focus_pity.npy')
 
-if total_heroes[:,0].size == 3:
-    specific_colors = ['#ffcdd2', '#ef9a9a', '#ff3d4c',
-                       '#c5cae9', '#9fa8da', '#4086ff',
-                       '#c8e6c9', '#a5d6a7', '#9ff05e',
-                       '#f5f5f5', '#e0e0e0', '#acacac']
-    expsize = 0.2
-    explode = [0,0,expsize,
-               0,0,expsize,
-               0,0,expsize,
-               0,0,expsize]
-elif total_heroes[:,0].size == 4:
-    specific_colors = ['#ffcdd2', '#ef9a9a', '#f44336', '#e53935',
-                       '#c5cae9', '#9fa8da', '#3f51b5', '#3949ab',
-                       '#c8e6c9', '#a5d6a7', '#4caf50', '#43a047',
-                       '#f5f5f5', '#e0e0e0', '#9e9e9e', '#757575']
-    expsize = 0.2
-    explode = [0,0,expsize,expsize,
-               0,0,expsize,expsize,
-               0,0,expsize,expsize,
-               0,0,expsize,expsize]
 
-relative = np.empty_like(total_heroes)
-relative[:] = total_heroes[:]
-relative = relative.transpose().astype(float)
-for i in range(4):
-    buffer = relative[i] / relative[i].sum()
-    relative[i] = buffer * 100
+specific_colors = ['#ffcdd2', '#ef9a9a', '#ff3d4c',
+                    '#c5cae9', '#9fa8da', '#4086ff',
+                    '#c8e6c9', '#a5d6a7', '#9ff05e',
+                   '#f5f5f5', '#e0e0e0', '#acacac']
+expsize = 0.2
+explode = [0,0,expsize,
+            0,0,expsize,
+            0,0,expsize,
+            0,0,expsize]
 
-relative_string = np.char.mod('%1.1f', relative.flatten())
+#################################
+# Rates calculation analitically
+rates_colors = np.zeros(4)
 
-print(relative_string)
+for i in [0,1,2,3]:
+    print(i)
+    rates_colors[i] = pity[0]*pool[2, i]/total[2] + pity[1]*pool[1,i]/total[1] + (1-sum(pity))*pool[0,i]/total[0]
 
-for i in range(relative_string.size):
-    relative_string[i] = relative_string[i] + '%'
-    relative_string[i] = relative_string[i].replace('0.0%', ' ')
+print(rates_colors*100)
+# sys.exit("DEBUG")
 
+rates = np.zeros(12)
+rates_internal = np.zeros(12)
+
+# cycle colors
+for i in [0,1,2,3]:
+        # 5* focus
+    rates[i*3 + 2] = pity[0]*pool[2, i]/total[2] / rates_colors[i]
+    rates_internal[i*3 + 2] = pity[0]*pool[2, i]/total[2]
+
+        # 5* non focus
+    rates[i*3 + 1] = pity[1]*pool[1,i]/total[1] / rates_colors[i]
+    rates_internal[i*3 + 1] = pity[1]*pool[1,i]/total[1]
+
+    # cycle rarities
+        # 4-3 star
+    rates[i*3] = 1 - rates[i*3 + 2] -rates[i*3 + 1]
+    rates_internal[i*3] = (1-sum(pity))*pool[0,i]/total[0]
+
+rates *= 100
+print(rates[0:3])
+print(rates[3:6])
+print(rates[6:9])
+print(rates[9:12])
+#################################
+
+
+rates_string = np.char.mod('%0.1f', rates)
+rates_string_mod = np.empty(0, dtype='object')
+print(rates_string)
+
+for i in range(rates_string.size):
+    #rates_string[i] = rates_string[i] + '%'
+    rates_string_mod = np.append(rates_string_mod, rates_string[i] + '%')
+    rates_string_mod[i] = rates_string_mod[i].replace('0.0%', ' ')
+
+print(rates_string_mod)
 
 fig, ax = plt.subplots()
 
@@ -48,11 +74,12 @@ size = 0.25
 
 general_colors = ['red', 'blue', 'green', 'gray']
 
-ax.pie(total_heroes.transpose().flatten(), radius=1, colors=specific_colors, explode=explode, labels=relative_string, startangle=angl, labeldistance=1.05, 
+ax.pie(rates_internal, radius=1, colors=specific_colors, explode=explode, labels=rates_string_mod, startangle=angl, labeldistance=1.05, 
     wedgeprops=dict(width=size, edgecolor='w'),
     textprops=dict(fontsize=20, fontname='nintendoP_Skip-D_003', color='white'))
+# 
 
-ax.pie(total_heroes.sum(axis=0), radius=1-size, colors=general_colors, autopct='%1.0f%%',pctdistance=0.5,startangle=angl,
+ax.pie(rates_colors, radius=1-size, colors=general_colors, autopct='%1.0f%%',pctdistance=0.5,startangle=angl,
     wedgeprops=dict(width=1-size, edgecolor='w'),
     textprops=dict(color='white', fontname='nintendoP_Skip-D_003', fontsize=30))
 
